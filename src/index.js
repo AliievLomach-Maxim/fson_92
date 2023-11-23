@@ -2,9 +2,7 @@
 // import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-// import './index.css'
-
-
+import './index.css'
 
 // const root = ReactDOM.createRoot(document.getElementById('root'))
 // root.render(<React.StrictMode></React.StrictMode>)
@@ -58,7 +56,6 @@ const root = document.getElementById('root')
 // 		{Div3({ age: 25, name: 'Bob' })}
 // 	</>
 // )
-
 
 // console.log('div :>> ', div)
 ReactDOM.createRoot(root).render(<App />)
