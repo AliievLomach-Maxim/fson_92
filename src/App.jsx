@@ -1,21 +1,40 @@
-import Card from './components/Card/Card'
-import Card2 from './components/Card2'
-import Container from './components/Container/Container'
+import Header from './components/Header/Header'
+import Counter from './components/Counter/Counter'
+import Modal from './components/Modal/Modal'
+import { Component } from 'react'
 
-const App = () => {
-	return (
-		<>
-			<Container>
-				<Card />
-				{/* {Card()} */}
-			</Container>
-			{/* <Container children={<Card/>}/> */}
-			<Container>
-				<div>qrwety</div>
-			</Container>
-			<Card2 />
-		</>
-	)
+class App extends Component {
+	state = {
+		isShowModal: false,
+	}
+
+	// showModal = () => {
+	// 	this.setState({
+	// 		isShowModal: true,
+	// 	})
+	// }
+
+	// hideModal = () => {
+	// 	this.setState({
+	// 		isShowModal: false,
+	// 	})
+	// }
+	toggleModal = () => {
+		this.setState((prev) => ({
+			isShowModal: !prev.isShowModal,
+		}))
+	}
+	render() {
+		return (
+			<>
+				<Header showModal={this.toggleModal} />
+				<Counter name='Alex' />
+				{this.state.isShowModal && (
+					<Modal hideModal={this.toggleModal}>zxmczmxc</Modal>
+				)}
+			</>
+		)
+	}
 }
 
 export default App
