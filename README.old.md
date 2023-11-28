@@ -31,3 +31,24 @@
     -   CSS in JS
         -   styled-components
         -   props
+
+## Module 2
+
+### Less 1
+
+- Class Component
+
+- Events
+
+  - Event delegation
+  - inLine clb Function
+  - clb function with context
+    - public values
+    - constructor && prototype
+    - SyntheticEvent Object vs Async
+
+- State
+
+  - update state with setState(update)
+  - prevState
+  - upper state
