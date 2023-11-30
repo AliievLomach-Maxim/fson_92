@@ -52,3 +52,11 @@
   - update state with setState(update)
   - prevState
   - upper state
+
+### Less 2
+
+- onChange vs control form
+- onSubmit
+- class Form
+- form reset
+- add todo
