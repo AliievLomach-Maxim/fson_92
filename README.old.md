@@ -60,3 +60,12 @@
 - class Form
 - form reset
 - add todo
+
+## Module 3
+
+### Less 2
+
+- http how to use
+- architecture
+- http errors
+- pattern stateMachine

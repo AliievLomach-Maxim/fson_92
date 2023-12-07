@@ -7,6 +7,7 @@ import FormCreateTodo from './components/Forms/FormCreateTodo'
 import TodoList from './components/TodoList'
 import data from './data.json'
 import { nanoid } from 'nanoid'
+import ProductsList from './components/ProductsList'
 
 class App extends Component {
 	state = {
@@ -99,7 +100,7 @@ class App extends Component {
 					</div>
 				)}
 				<Header showModal={this.toggleModal} />
-
+				<ProductsList />
 				{isShowModal && <Modal hideModal={this.toggleModal}>zxmczmxc</Modal>}
 
 				<FormCreateTodo createTodo={this.createTodo} />
