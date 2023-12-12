@@ -1,165 +1,121 @@
-// import FormCreateTodo from './components/Forms/FormCreateUser'
-import Header from './components/Header/Header'
-// import Counter from './components/Counter/Counter'
-import Modal from './components/Modal/Modal'
-import { Component } from 'react'
-import FormCreateTodo from './components/Forms/FormCreateTodo'
-import TodoList from './components/TodoList'
-import data from './data.json'
 import { nanoid } from 'nanoid'
-import ProductsList from './components/ProductsList'
+import { useEffect, useState } from 'react'
+import Header from './components/Header/Header'
+import ProductsList from './components/ProductsList/index'
+import Modal from './components/Modal/Modal'
+import FormCreateTodo from './components/Forms/FormCreateTodo'
+import TodoList from './components/TodoList/index'
 
-class App extends Component {
-	state = {
+// function name(params) {
+// 	return [value, fn]
+// }
+
+const App = () => {
+	const [isShowModal, setIsShowModal] = useState(false)
+	// const [todo, setTodo] = useState(null)
+	const [todo, setTodo] = useState([])
+	const [isDeleted, setIsDeleted] = useState(false)
+	const [isCreated, setIsCreated] = useState(false)
+
+	const [state, setState] = useState({
 		isShowModal: false,
 		todo: null,
 		isDeleted: false,
 		isCreated: false,
+	})
+	// every render & mount
+	useEffect(() => {
+		console.log('render')
+	})
+
+	// cdm
+	useEffect(() => {
+		console.log('mount')
+	}, [])
+
+	// cdm + cdu + if()
+	useEffect(() => {
+		console.log('mount + updated todo')
+	}, [todo])
+
+	// cdu + if()
+	useEffect(() => {
+		todo.length > 0 && console.log('updated todo')
+	}, [todo])
+
+	// setState((prev) => ({
+	// 	...prev,
+	// 	isShowModal: true,
+	// }))
+
+	const toggleModal = () => {
+		setIsShowModal((prev) => !prev)
 	}
 
-	componentDidMount() {
-		const localData = localStorage.getItem('todo')
-		if (localData && JSON.parse(localData).length > 0) {
-			this.setState({
-				todo: JSON.parse(localData),
-			})
-		} else
-			this.setState({
-				todo: data,
-			})
-	}
-
-	componentDidUpdate(prevProps, prevState) {
-		if (prevState.todo?.length !== this.state.todo.length)
-			localStorage.setItem('todo', JSON.stringify(this.state.todo))
-
-		if (prevState.todo?.length > this.state.todo.length) {
-			this.setState({ isDeleted: true })
-			setTimeout(() => {
-				this.setState({ isDeleted: false })
-			}, 1500)
-		}
-
-		if (prevState.todo?.length < this.state.todo.length) {
-			this.setState({ isCreated: true })
-			setTimeout(() => {
-				this.setState({ isCreated: false })
-			}, 1500)
-		}
-	}
-
-	toggleModal = () => {
-		this.setState((prev) => ({
-			isShowModal: !prev.isShowModal,
-		}))
-	}
-
-	createTodo = (data) => {
+	const createTodo = (data) => {
 		const newTodo = {
 			...data,
 			id: nanoid(),
 			completed: false,
 		}
-		const isDuplicated = this.state.todo.find((el) => el.title === data.title)
+
+		const isDuplicated = todo.find((el) => el.title === data.title)
 		if (isDuplicated) return
-		this.setState((prev) => ({
-			todo: [...prev.todo, newTodo],
-		}))
+		setTodo((prevState) => [...prevState, newTodo])
+		setIsCreated(true)
+		setTimeout(() => {
+			setIsCreated(false)
+		}, 1500)
 	}
 
-	deleteTodo = (id) => {
-		this.setState((prev) => ({
-			todo: prev.todo.filter((el) => el.id !== id),
-		}))
+	const deleteTodo = (id) => {
+		setTodo((prevTodo) => {
+			return prevTodo.filter((el) => el.id !== id)
+		})
 	}
 
-	updateTodo = (id) => {
-		this.setState(
-			(prev) => ({
-				todo: prev.todo.map((el) => {
-					if (el.id === id) return { ...el, completed: !el.completed }
-					else return el
-				}),
-			}),
-			() => localStorage.setItem('todo', JSON.stringify(this.state.todo))
-		)
+	const updateTodo = (id) => {
+		setTodo((prev) => prev.map((el) => (el.id === id ? { ...el, completed: !el.completed } : el)))
 	}
 
-	render() {
-		const { isDeleted, isShowModal, todo, isCreated } = this.state
-		return (
-			<>
-				{isDeleted && (
-					<div className='alert alert-primary' role='alert'>
-						Deleted
-					</div>
-				)}
-				{isCreated && (
-					<div className='alert alert-primary' role='alert'>
-						Created
-					</div>
-				)}
-				<Header showModal={this.toggleModal} />
-				<ProductsList />
-				{isShowModal && <Modal hideModal={this.toggleModal}>zxmczmxc</Modal>}
+	return (
+		<>
+			{isDeleted && (
+				<div className='alert alert-primary' role='alert'>
+					Deleted
+				</div>
+			)}
+			{isCreated && (
+				<div className='alert alert-primary' role='alert'>
+					Created
+				</div>
+			)}
+			<Header showModal={toggleModal} />
+			<ProductsList />
+			{isShowModal && <Modal hideModal={toggleModal}>zxmczmxc</Modal>}
 
-				<FormCreateTodo createTodo={this.createTodo} />
-				{todo && <TodoList todo={todo} deleteTodo={this.deleteTodo} updateTodo={this.updateTodo} />}
-			</>
-		)
-	}
+			<FormCreateTodo createTodo={createTodo} />
+			{todo && <TodoList todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />}
+		</>
+	)
 }
 
 export default App
-// class App extends Component {
-// 	state = {
-// 		isShowModal: false,
-// 		todo: data,
-// 	}
 
-// 	toggleModal = () => {
-// 		this.setState((prev) => ({
-// 			isShowModal: !prev.isShowModal,
-// 		}))
-// 	}
-
-// 	// sendUserData = (data) => {
-// 	// 	const newUser = {
-// 	// 		...data,
-// 	// 		id: 'qrwety',
-// 	// 		location: 'UA',
-// 	// 	}
-// 	// 	console.log('data :>> ', newUser)
-// 	// }
-// 	createTodo = (data) => {}
-// 	render() {
-// 		return (
-// 			<>
-// 				<Header showModal={this.toggleModal} />
-// 				{/* <Counter name='Alex' /> */}
-// 				{this.state.isShowModal && (
-// 					<Modal hideModal={this.toggleModal}>zxmczmxc</Modal>
-// 				)}
-// 				{/* <FormCreateTodo sendUserData={this.sendUserData} /> */}
-// 				<FormCreateTodo createTodo={this.createTodo} />
-// 				<TodoList todo={this.state.todo} />
-// 			</>
-// 		)
-// 	}
+// function fn() {}
+// const name = (params) => {
+// 	const number = 10
+// 	return number
 // }
-
-// export default App
 
 // const user = {
-// 	name: 'Alex',
-// 	info: {
-// 		name: '',
-// 		info2: {
-// 			name: '',
-// 			description:''
-// 		},
-// 	},
+// 	name: 'alex',
+// 	age: 30,
 // }
 
-// user.info&&user.info.info2 && user.info.info2.name
-// user.info?.info2?.name
+// const { age, name,value } = user
+
+// const user = ['Alex', 30]
+// const user2 = [30, 'Alex']
+
+// const [name, age] = user
