@@ -69,3 +69,30 @@
 - architecture
 - http errors
 - pattern stateMachine
+
+# Module 4
+
+### Less 1
+
+- useState
+- useState nothing save state
+- useState one State = one useState
+- useState convert class to hooks
+
+- useEffect
+- useEffect first render
+- useEffect every render
+- useEffect clear after render
+
+- useEffect first render
+- useEffect update on any change
+
+- edit class to huk
+
+### Less 2
+
+- useMemo
+- useCallback
+- Profiler
+- useContext
+- Provider
