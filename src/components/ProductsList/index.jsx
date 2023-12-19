@@ -1,16 +1,14 @@
+import { useCallback, useEffect, useState } from 'react'
+import { getAllProducts } from '../../api/products'
+import Product from '../Product/index'
+
+const LIMIT = 10
 
 const ProductsList = () => {
 	const [products, setProducts] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 	const [page, setPage] = useState(1)
-
-
-	// const ref = useRef(100)
-	// console.log('ref.current :>> ', ref.current)
-	// ref.current = 200
-
-	const refButton = useRef()
 
 	const getProducts = useCallback(async () => {
 		try {
@@ -32,26 +30,6 @@ const ProductsList = () => {
 	const handleLoadMore = () => {
 		setPage((prev) => prev + 1)
 	}
-
-	// const result = useMemo(()=>{},[])
-
-	// const sortedProducts = products && [...products].sort((a, b) => a.price - b.price)
-	// const sortedProducts = products?.toSorted((a, b) => {
-	// 	console.log('sorting')
-	// 	for (let i = 0; i < 10000000; i++) {}
-	// 	return a.price - b.price
-	// })
-
-	const sortedProducts = useMemo(() => {
-		return products?.toSorted((a, b) => {
-			console.log('sorting')
-			for (let i = 0; i < 10000000; i++) {}
-			return a.price - b.price
-		})
-	}, [products])
-	// const result = useCallback(()=>{},[])
-
-
 
 	return (
 		<>

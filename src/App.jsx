@@ -1,48 +1,35 @@
-
-import React, { createContext, useState } from 'react'
-
-import Component2 from './Component2'
-import Wrapper3 from './Wrapper3'
-import CounterProvider from './context/CounterProvider'
-
-export const ParentCounterContext = createContext()
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
+import TodoPage from './pages/TodoPage'
+import Layout from './layout/Layout'
+import Layout2 from './layout/Layout2'
+import TodoDetailsPage from './pages/TodoDetailsPage'
+import ProductDetailsPage from './pages/ProductDetailsPage'
 
 const App = () => {
 	return (
-		<CounterProvider>
-			<Wrapper3 />
-			<Component2 />
-		</CounterProvider>
-
-		// <Component1 counter={counter} />
-		// <Component2 handleCounter={() => setCounter((prev) => prev + 1)} counter={counter} />
+		<>
+			<Routes>
+				<Route path='/' element={<Layout />}>
+					<Route index element={<HomePage />} />
+					<Route path='products' element={<ProductsPage />}>
+						<Route path=':productId' element={<ProductDetailsPage />} />
+					</Route>
+					<Route path='products/:productId' element={<ProductDetailsPage />} />
+					<Route path='todo' element={<TodoPage />} />
+					<Route path='todo/:todoId' element={<TodoDetailsPage />} />
+				</Route>
+				<Route path='/pages' element={<Layout2 />}>
+					<Route index element={<HomePage />} />
+					<Route path='products' element={<ProductsPage />} />
+					<Route path='todo' element={<TodoPage />} />
+				</Route>
+				<Route path='*' element={<h1>404</h1>} />
+			</Routes>
+		</>
 	)
 }
 
 export default App
-// import React, { createContext, useState } from 'react'
-
-// import Component2 from './Component2'
-// import Wrapper3 from './Wrapper3'
-
-// export const CounterContext = createContext()
-// export const ParentCounterContext = createContext()
-
-// const App = () => {
-// 	const [counter, setCounter] = useState(0)
-// 	const increment = () => {
-// 		setCounter((prev) => prev + 1)
-// 	}
-// 	return (
-// 		<ParentCounterContext.Provider value={counter}>
-// 			<CounterContext.Provider value={{ counter, increment }}>
-// 				<Wrapper3 />
-// 				<Component2 />
-// 			</CounterContext.Provider>
-// 		</ParentCounterContext.Provider>
-// 		// <Component1 counter={counter} />
-// 		// <Component2 handleCounter={() => setCounter((prev) => prev + 1)} counter={counter} />
-// 	)
-// }
-
-// export default App
