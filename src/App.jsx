@@ -8,6 +8,8 @@ import Layout from './layout/Layout'
 // import TodoDetailsPage from './pages/TodoDetailsPage'
 // import ProductDetailsPage from './pages/ProductDetailsPage'
 
+import './store/store'
+
 const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'))
 const HomePage = lazy(() => import('./pages/HomePage'))
 const ProductsPage = lazy(() => import('./pages/ProductsPage'))
