@@ -1,37 +1,72 @@
-import { combineReducers, createStore } from 'redux'
-import { counterReducer } from './counter/counterReducer'
-import { todoReducer } from './todo/ruducerTodo'
+import { configureStore } from '@reduxjs/toolkit'
+import { counterReducer } from './counterToolkit/counterReducer'
+import { todoReducer } from './todoWithSlice/sliceTodo'
 
-const rootReducer = combineReducers({
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+	key: 'todo',
+	storage,
+	whitelist: ['todo'],
+}
+
+const persistedReducer = persistReducer(persistConfig, todoReducer)
+
+const reducer = {
 	counter: counterReducer,
-	todo: todoReducer,
-})
+	todo: persistedReducer,
+}
 
-export const store = createStore(rootReducer)
+export const store = configureStore({ reducer })
 
-// import { createStore } from 'redux'
+export const persistor = persistStore(store)
 
-// const reducer = (state, action) => {
-// 	if (action.type === 'addCounter') {
-// 		return {
-// 			...state,
-// 			counter: action.payload,
-// 		}
-// 	} else if (action.type === 'createUsers') {
-// 		return {
-// 			...state,
-// 			users: action.payload,
-// 		}
-// 	}
-// 	return state
+// import { configureStore, combineReducers } from '@reduxjs/toolkit'
+// import { counterReducer } from './counterToolkit/counterReducer'
+// import { todoReducer } from './todoWithSlice/sliceTodo'
+
+// import { persistStore, persistReducer } from 'redux-persist'
+// import storage from 'redux-persist/lib/storage'
+
+// const reducer = combineReducers({
+// 	counter: counterReducer,
+// 	todo: todoReducer,
+// })
+
+// const persistConfig = {
+// 	key: 'todo',
+// 	storage,
 // }
 
-// export const store = createStore(reducer, { counter: 0, todo: [] })
+// const persistedReducer = persistReducer(persistConfig, reducer)
 
-// // store.dispatch({ type: 'addCounter', payload: 100 })
+// export const store = configureStore({ reducer: persistedReducer })
 
-// // store.dispatch({ type: 'createUsers', payload: [1, 2, 3] })
+// export const persistor = persistStore(store)
 
-// // console.log('store :>> ', store.getState())
+// import { configureStore } from '@reduxjs/toolkit'
+// import { counterReducer } from './counterToolkit/counterReducer'
+// import { todoReducer } from './todoWithSlice/sliceTodo'
 
-// // const [first, setfirst] = useState(second)
+// const reducer = {
+// 	counter: counterReducer,
+// 	todo: todoReducer,
+// }
+
+// export const store = configureStore({ reducer })
+
+// import { combineReducers, createStore } from 'redux'
+// // import { counterReducer } from './counter/counterReducer'
+// import { todoReducer } from './todo/ruducerTodo'
+// import { counterReducer } from './counterToolkit/counterReducer'
+// import { configureStore } from '@reduxjs/toolkit'
+
+// const reducer = {
+// 	// counter: counterReducer,
+// 	counter: counterReducer,
+// 	todo: todoReducer,
+// }
+
+// export const store = configureStore({ reducer })
+// // export const store = createStore(rootReducer)

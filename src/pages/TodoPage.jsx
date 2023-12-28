@@ -1,19 +1,28 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { addCounterAction } from '../store/counter/actions'
+import TodoList from '../components/TodoList'
+import { addTodoAction, removeTodoAction, updateTodoAction } from '../store/todoWithSlice/sliceTodo'
+import FormCreateTodo from '../components/Forms/FormCreateTodo'
 
 const TodoPage = () => {
-	const state = useSelector((state) => state)
-	console.log('state :>> ', state)
-
+	const { todo } = useSelector((state) => state.todo)
 	const dispatch = useDispatch()
 
-	const handleClick = () => {
-		dispatch(addCounterAction(100))
+	const deleteTodo = (id) => {
+		dispatch(removeTodoAction(id))
+	}
+
+	const updateTodo = (id) => {
+		dispatch(updateTodoAction(id))
+	}
+
+	const createTodo = (data) => {
+		dispatch(addTodoAction(data))
 	}
 
 	return (
 		<>
-			<button onClick={handleClick}>{0}</button>
+			<FormCreateTodo createTodo={createTodo} />
+			{todo && <TodoList todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />}
 		</>
 	)
 }
