@@ -4,6 +4,7 @@ import { todoReducer } from './todoWithSlice/sliceTodo'
 
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import { productsReducer } from './products/slice'
 
 const persistConfig = {
 	key: 'todo',
@@ -16,57 +17,22 @@ const persistedReducer = persistReducer(persistConfig, todoReducer)
 const reducer = {
 	counter: counterReducer,
 	todo: persistedReducer,
+	products: productsReducer,
 }
+
+// const customMiddl = (store) => {
+// 	return (next) => {
+// 		return (action) => {
+// 			if (typeof action === 'function') {
+// 				action(store.dispatch)
+
+// 				return
+// 			}
+// 			return next(action)
+// 		}
+// 	}
+// }
 
 export const store = configureStore({ reducer })
 
 export const persistor = persistStore(store)
-
-// import { configureStore, combineReducers } from '@reduxjs/toolkit'
-// import { counterReducer } from './counterToolkit/counterReducer'
-// import { todoReducer } from './todoWithSlice/sliceTodo'
-
-// import { persistStore, persistReducer } from 'redux-persist'
-// import storage from 'redux-persist/lib/storage'
-
-// const reducer = combineReducers({
-// 	counter: counterReducer,
-// 	todo: todoReducer,
-// })
-
-// const persistConfig = {
-// 	key: 'todo',
-// 	storage,
-// }
-
-// const persistedReducer = persistReducer(persistConfig, reducer)
-
-// export const store = configureStore({ reducer: persistedReducer })
-
-// export const persistor = persistStore(store)
-
-// import { configureStore } from '@reduxjs/toolkit'
-// import { counterReducer } from './counterToolkit/counterReducer'
-// import { todoReducer } from './todoWithSlice/sliceTodo'
-
-// const reducer = {
-// 	counter: counterReducer,
-// 	todo: todoReducer,
-// }
-
-// export const store = configureStore({ reducer })
-
-// import { combineReducers, createStore } from 'redux'
-// // import { counterReducer } from './counter/counterReducer'
-// import { todoReducer } from './todo/ruducerTodo'
-// import { counterReducer } from './counterToolkit/counterReducer'
-// import { configureStore } from '@reduxjs/toolkit'
-
-// const reducer = {
-// 	// counter: counterReducer,
-// 	counter: counterReducer,
-// 	todo: todoReducer,
-// }
-
-// export const store = configureStore({ reducer })
-// // export const store = createStore(rootReducer)
