@@ -1,5 +1,42 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getProductsApi } from '../../api/products'
+import { createSlice } from '@reduxjs/toolkit'
+import { createProductsThunk, getProductsThunk } from './thunks'
+
+const handlePending = (state) => {
+	state.isLoading = true
+	state.error = ''
+}
+
+const handleRejected = (state, { payload }) => {
+	state.isLoading = false
+	state.error = payload.message
+}
+const handleFulfilled = (state) => {
+	state.isLoading = false
+}
+
+const productsSlice = createSlice({
+	name: 'products',
+	initialState: {
+		products: null,
+		isLoading: false,
+		error: '',
+		singleProduct: null,
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getProductsThunk.fulfilled, (state, { payload }) => {
+				state.products = payload.products
+			})
+			.addCase(createProductsThunk.fulfilled, (state, { payload }) => {
+				state.singleProduct = payload
+			})
+			.addMatcher((action) => action.type.endsWith('/pending'), handlePending)
+			.addMatcher((action) => action.type.endsWith('/rejected'), handleRejected)
+			.addMatcher((action) => action.type.endsWith('/fulfilled'), handleFulfilled)
+	},
+})
+
+export const productsReducer = productsSlice.reducer
 
 // export const productsAction = () => {
 // 	return async (dispatch) => {
@@ -17,71 +54,39 @@ import { getProductsApi } from '../../api/products'
 // export const getProductsThunk = createAsyncThunk('products/getProducts', () => getProductsApi())
 
 // коли нас цікавить відповідь про ПОМИЛКУ від серверу:
-export const getProductsThunk = createAsyncThunk(
-	'products/getProducts',
-	async (_, { rejectWithValue }) => {
-		try {
-			return await getProductsApi()
-		} catch (error) {
-			return rejectWithValue(error.response.data)
-		}
-	}
-)
-// export const createProductsThunk = createAsyncThunk(
+
+// Такий підхід, можна використовувати, тільки, якщо НЕ потрібна відповідь про ПОМИЛКУ від серверу!!!!!
+// .addCase(getProductsThunk.rejected, (state, { error }) => {
+// 	state.isLoading = false
+// 	state.error = error.message
+// })
+
+// коли нас цікавить відповідь про ПОМИЛКУ від серверу:
+
+// export const getProductsThunk = createAsyncThunk(
 // 	'products/getProducts',
-// 	async (value, { rejectWithValue }) => {
+// 	async (_, { rejectWithValue }) => {
 // 		try {
-// 			return await getProductsApi(value)
+// 			return await getProductsApi()
 // 		} catch (error) {
 // 			return rejectWithValue(error.response.data)
 // 		}
 // 	}
 // )
 
-const productsSlice = createSlice({
-	name: 'products',
-	initialState: {
-		products: null,
-		isLoading: false,
-		error: '',
-	},
-	extraReducers: (builder) => {
-		builder
-			.addCase(getProductsThunk.pending, (state) => {
-				state.isLoading = true
-				state.error = ''
-			})
-			.addCase(getProductsThunk.fulfilled, (state, { payload }) => {
-				state.isLoading = false
-				state.products = payload
-			})
-			// Такий підхід, можна використовувати, тільки, якщо НЕ потрібна відповідь про ПОМИЛКУ від серверу!!!!!
-			// .addCase(getProductsThunk.rejected, (state, { error }) => {
-			// 	state.isLoading = false
-			// 	state.error = error.message
-			// })
+// .addCase(getProductsThunk.rejected, (state, { payload }) => {
+// 	state.isLoading = false
+// 	state.error = payload.message
+// })
 
-			// коли нас цікавить відповідь про ПОМИЛКУ від серверу:
-
-			.addCase(getProductsThunk.rejected, (state, { payload }) => {
-				state.isLoading = false
-				state.error = payload.message
-			})
-	},
-	// reducers: {
-	// 	fetching: (state) => {
-	// 		state.isLoading = true
-	// 		state.error = ''
-	// 	},
-	// 	fulfilled: (state, { payload }) => {
-	// 		state.isLoading = false
-	// 		state.products = payload
-	// 	},
-	// 	rejected: (state, { payload }) => {
-	// 		state.isLoading = false
-	// 		state.error = payload
-	// 	},
-	// },
-})
-
-export const productsReducer = productsSlice.reducer
+// // .addCase(getProductsThunk.pending, handlePending)
+// .addCase(getProductsThunk.fulfilled, (state, { payload }) => {
+// 	state.isLoading = false
+// 	state.products = payload
+// })
+// .addCase(getProductsThunk.rejected, handleRejected)
+// // .addCase(createProductsThunk.pending, handlePending)
+// .addCase(createProductsThunk.fulfilled, (state, { payload }) => {
+// 	state.isLoading = false
+// 	state.singleProduct = payload
+// })
