@@ -15,10 +15,15 @@ export const getSingleProduct = async (id) => {
 // 	return data
 // }
 
-export const getProductsApi = async (skip, limit, query) => {
+export const getProductsApi = async (skip = 0, limit = 10, query) => {
 	const url = query
 		? `products/search?limit=${limit}&skip=${skip}&q=${query}`
 		: `products?limit=${limit}&skip=${skip}`
 	const { data } = await api(url)
+	return data
+}
+
+export const createProductsApi = async (body) => {
+	const { data } = await api.post('products/add', body)
 	return data
 }

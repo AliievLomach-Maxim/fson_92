@@ -1,33 +1,46 @@
 import FormSearchProducts from '../components/Forms/FormSearchProducts'
 import ProductsList from '../components/ProductsList/index'
-import { useState, useCallback, useEffect } from 'react'
-import { getProductsApi } from '../api/products'
-import { useLocation, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductsThunk } from '../store/products/slice'
-
-const LIMIT = 10
+import { useEffect, useState } from 'react'
+import FormCreateProduct from '../components/Forms/FormCreateProduct'
+import { createProductsThunk, getProductsThunk } from '../store/products/thunks'
+import {
+	selectorError,
+	selectorIsLoading,
+	selectorProducts,
+	selectorSingleProduct,
+} from '../store/products/selectors'
 
 const ProductsPage = () => {
-	const { isLoading, products, error } = useSelector((state) => state.products)
+	const isLoading = useSelector(selectorIsLoading)
+	const products = useSelector(selectorProducts)
+	const error = useSelector(selectorError)
+	const singleProduct = useSelector(selectorSingleProduct)
+
 	const dispatch = useDispatch()
+
+	const [counter, setCounter] = useState(0)
 
 	useEffect(() => {
 		dispatch(getProductsThunk())
 	}, [dispatch])
 
-	// const createProducts = (value) => {
-	// 	dispatch(createProductsThunk(value))
-	// }
+	console.log('singleProduct :>> ', singleProduct)
 
 	const handleLoadMore = () => {
 		// setPage((prev) => prev + 1)
 	}
 
+	const createProduct = (body) => {
+		dispatch(createProductsThunk(body))
+	}
+
 	return (
 		<>
+			<button onClick={() => setCounter((prev) => prev + 1)}>{counter}</button>
 			{isLoading && <h1>loading...</h1>}
 			{error && <h1>{error}</h1>}
+			<FormCreateProduct createProduct={createProduct} />
 			<FormSearchProducts />
 			{products && (
 				<ProductsList handleLoadMore={handleLoadMore} products={products} />

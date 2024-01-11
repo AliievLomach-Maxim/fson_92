@@ -5,6 +5,7 @@ import { todoReducer } from './todoWithSlice/sliceTodo'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { productsReducer } from './products/slice'
+import { postsReducer } from './posts/slice'
 
 const persistConfig = {
 	key: 'todo',
@@ -18,6 +19,7 @@ const reducer = {
 	counter: counterReducer,
 	todo: persistedReducer,
 	products: productsReducer,
+	posts: postsReducer,
 }
 
 // const customMiddl = (store) => {
