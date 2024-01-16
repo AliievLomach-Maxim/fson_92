@@ -6,34 +6,23 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { productsReducer } from './products/slice'
 import { postsReducer } from './posts/slice'
+import { authReducer } from './auth/slice'
 
 const persistConfig = {
 	key: 'todo',
 	storage,
-	whitelist: ['todo'],
+	whitelist: ['token'],
 }
 
-const persistedReducer = persistReducer(persistConfig, todoReducer)
+const persistedReducer = persistReducer(persistConfig, authReducer)
 
 const reducer = {
 	counter: counterReducer,
-	todo: persistedReducer,
+	todo: todoReducer,
 	products: productsReducer,
 	posts: postsReducer,
+	auth: persistedReducer,
 }
-
-// const customMiddl = (store) => {
-// 	return (next) => {
-// 		return (action) => {
-// 			if (typeof action === 'function') {
-// 				action(store.dispatch)
-
-// 				return
-// 			}
-// 			return next(action)
-// 		}
-// 	}
-// }
 
 export const store = configureStore({ reducer })
 
