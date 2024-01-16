@@ -17,6 +17,8 @@ const ProductsPage = lazy(() => import('./pages/ProductsPage'))
 const TodoPage = lazy(() => import('./pages/TodoPage'))
 const Layout2 = lazy(() => import('./layout/Layout2'))
 const TodoDetailsPage = lazy(() => import('./pages/TodoDetailsPage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const RegistrationPage = lazy(() => import('./pages/RegistrationPage'))
 
 const App = () => {
 	return (
@@ -36,6 +38,9 @@ const App = () => {
 						<Route path='products' element={<ProductsPage />} />
 						<Route path='todo' element={<TodoPage />} />
 					</Route>
+					<Route path='/login' element={<LoginPage />} />
+					<Route path='/registration' element={<RegistrationPage />} />
+
 					<Route path='*' element={<h1>404</h1>} />
 				</Routes>
 			</Suspense>
