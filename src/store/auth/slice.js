@@ -1,10 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { signUpThunk } from './thunks'
+import { loginThunk, refreshThunk, signUpThunk } from './thunks'
 import { handleSignUp } from './handlers'
 
 const initialState = {
-	isLoading: false,
-	error: '',
 	token: '',
 	profile: null,
 }
@@ -12,18 +10,24 @@ const initialState = {
 const authSlice = createSlice({
 	name: 'auth',
 	initialState,
+	reducers: {
+		logout: (state) => {
+			state.token = ''
+			state.profile = null
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(signUpThunk.fulfilled, handleSignUp)
-			.addCase(signUpThunk.rejected, (state, { payload }) => {
-				state.isLoading = false
-				state.error = payload
-			})
-			.addCase(signUpThunk.pending, (state) => {
-				state.isLoading = false
-				state.error = ''
+			.addCase(loginThunk.fulfilled, handleSignUp)
+			.addCase(refreshThunk.fulfilled, handleSignUp)
+			.addCase(refreshThunk.rejected, (state) => {
+				state.token = ''
+				state.profile = null
+				// localStorage.clear()
 			})
 	},
 })
 
 export const authReducer = authSlice.reducer
+export const { logout } = authSlice.actions
