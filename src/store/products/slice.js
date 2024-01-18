@@ -1,25 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createProductsThunk, getProductsThunk } from './thunks'
 
-const handlePending = (state) => {
-	state.isLoading = true
-	state.error = ''
-}
-
-const handleRejected = (state, { payload }) => {
-	state.isLoading = false
-	state.error = payload?.message
-}
-const handleFulfilled = (state) => {
-	state.isLoading = false
-}
-
 const productsSlice = createSlice({
 	name: 'products',
 	initialState: {
 		products: null,
-		isLoading: false,
-		error: '',
 		singleProduct: null,
 	},
 	extraReducers: (builder) => {
@@ -30,9 +15,6 @@ const productsSlice = createSlice({
 			.addCase(createProductsThunk.fulfilled, (state, { payload }) => {
 				state.singleProduct = payload
 			})
-			.addMatcher((action) => action.type.endsWith('/pending'), handlePending)
-			.addMatcher((action) => action.type.endsWith('/rejected'), handleRejected)
-			.addMatcher((action) => action.type.endsWith('/fulfilled'), handleFulfilled)
 	},
 })
 

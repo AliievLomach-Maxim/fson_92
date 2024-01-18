@@ -1,6 +1,17 @@
-import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { profileSelector } from '../../store/auth/selectors'
+import { logout } from '../../store/auth/slice'
 
 const Header = () => {
+	const profile = useSelector(profileSelector)
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
+	const handleLogOut = () => {
+		dispatch(logout())
+		navigate('/login')
+	}
 	return (
 		<header>
 			<nav>
@@ -20,9 +31,16 @@ const Header = () => {
 					<li>
 						<NavLink to='/posts'>Posts</NavLink>
 					</li>
-					<button>
-						<NavLink to='/login'>Login</NavLink>
-					</button>
+
+					{profile ? (
+						<button onClick={handleLogOut}>Logout</button>
+					) : (
+						<button>
+							<NavLink to='/login'>Login</NavLink>
+						</button>
+					)}
+
+					{profile && <p>{profile.firstName}</p>}
 				</ul>
 			</nav>
 		</header>

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 // import HomePage from './pages/HomePage'
 // import ProductsPage from './pages/ProductsPage'
@@ -10,6 +10,12 @@ import Layout from './layout/Layout'
 
 import './store/store'
 import PostsPage from './pages/PostsPage'
+import { useDispatch, useSelector } from 'react-redux'
+import { profileSelector } from './store/auth/selectors'
+import { refreshThunk } from './store/auth/thunks'
+import PrivateRoute from './guards/PrivateRoute'
+import PublicRoute from './guards/PublicRoute'
+import Loader from './components/Loader'
 
 const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'))
 const HomePage = lazy(() => import('./pages/HomePage'))
@@ -21,13 +27,28 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegistrationPage = lazy(() => import('./pages/RegistrationPage'))
 
 const App = () => {
+	const profile = useSelector(profileSelector)
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		!profile && dispatch(refreshThunk())
+	}, [dispatch, profile])
+
 	return (
 		<>
+			<Loader />
 			<Suspense fallback={<>loading...</>}>
 				<Routes>
 					<Route path='/' element={<Layout />}>
 						<Route index element={<HomePage />} />
-						<Route path='products' element={<ProductsPage />} />
+						<Route
+							path='products'
+							element={
+								<PrivateRoute>
+									<ProductsPage />
+								</PrivateRoute>
+							}
+						/>
 						<Route path='products/:productId' element={<ProductDetailsPage />} />
 						<Route path='posts' element={<PostsPage />} />
 						<Route path='todo' element={<TodoPage />} />
@@ -38,8 +59,22 @@ const App = () => {
 						<Route path='products' element={<ProductsPage />} />
 						<Route path='todo' element={<TodoPage />} />
 					</Route>
-					<Route path='/login' element={<LoginPage />} />
-					<Route path='/registration' element={<RegistrationPage />} />
+					<Route
+						path='/login'
+						element={
+							<PublicRoute>
+								<LoginPage />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path='/registration'
+						element={
+							<PublicRoute>
+								<RegistrationPage />
+							</PublicRoute>
+						}
+					/>
 
 					<Route path='*' element={<h1>404</h1>} />
 				</Routes>

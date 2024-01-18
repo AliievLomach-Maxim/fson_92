@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage'
 import { productsReducer } from './products/slice'
 import { postsReducer } from './posts/slice'
 import { authReducer } from './auth/slice'
+import { rootReducer } from './root/slice'
 
 const persistConfig = {
 	key: 'todo',
@@ -22,6 +23,7 @@ const reducer = {
 	products: productsReducer,
 	posts: postsReducer,
 	auth: persistedReducer,
+	root: rootReducer,
 }
 
 export const store = configureStore({ reducer })

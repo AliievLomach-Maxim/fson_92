@@ -10,7 +10,11 @@ export const loginApi = async (body) => {
 	return data
 }
 
-export const refreshApi = async () => {
-	const { data } = await authApi('auth/refresh')
+export const refreshApi = async (token) => {
+	const { data } = await authApi('auth/refresh', {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
 	return data
 }
